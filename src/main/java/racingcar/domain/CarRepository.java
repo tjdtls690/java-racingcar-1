@@ -20,11 +20,9 @@ public class CarRepository {
     }
     
     private void validate(List<Car> newCars) {
-        validateLessThanMinimumNumberOfCars(newCars);
-        validateDuplicatedCarNames(newCars);
-    }
-    
-    private void validateDuplicatedCarNames(List<Car> newCars) {
+        if (newCars.size() < MINIMUM_NUMBER_OF_CARS) {
+            throw new IllegalArgumentException("차가 두 대 이상이어야 합니다.");
+        }
         if (getDistinctCarsNumber(newCars) != newCars.size()) {
             throw new IllegalArgumentException("차 이름은 중복될 수 없습니다.");
         }
@@ -35,12 +33,6 @@ public class CarRepository {
                 .map(Car::getName)
                 .distinct()
                 .count();
-    }
-    
-    private void validateLessThanMinimumNumberOfCars(List<Car> newCars) {
-        if (newCars.size() < MINIMUM_NUMBER_OF_CARS) {
-            throw new IllegalArgumentException("차가 두 대 이상이어야 합니다.");
-        }
     }
 
     public List<Car> findAll() {
