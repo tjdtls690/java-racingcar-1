@@ -25,12 +25,12 @@ public class CarRepository {
     }
     
     private void validateDuplicatedCarNames(List<Car> newCars) {
-        if (numberOfDeleteDuplicatedCars(newCars) != newCars.size()) {
+        if (getDistinctCarsNumber(newCars) != newCars.size()) {
             throw new IllegalArgumentException("차 이름은 중복될 수 없습니다.");
         }
     }
     
-    private int numberOfDeleteDuplicatedCars(List<Car> newCars) {
+    private int getDistinctCarsNumber(List<Car> newCars) {
         return (int) newCars.stream()
                 .map(Car::getName)
                 .distinct()
