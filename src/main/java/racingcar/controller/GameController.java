@@ -29,9 +29,9 @@ public class GameController {
     }
     
     private int getParsedTryNumber() {
-        String numberOfTry = readTryNumber();
-        NumberOfTryValidator.validate(numberOfTry);
-        return Integer.parseInt(numberOfTry);
+        String tryNumber = readTryNumber();
+        NumberOfTryValidator.validate(tryNumber);
+        return Integer.parseInt(tryNumber);
     }
     
     private String readTryNumber() {
