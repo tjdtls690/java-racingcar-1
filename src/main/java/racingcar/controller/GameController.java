@@ -41,7 +41,7 @@ public class GameController {
     private void runRacingGame(int tryNumber) {
         while (tryNumber-- > 0) {
             racingCarGame.race(new RandomBasedMovement());
-            outputView.printCarsStatus(CarRepository.findAll());
+            outputView.printCarsStatus(racingCarGame.findAllCar());
         }
     }
 }

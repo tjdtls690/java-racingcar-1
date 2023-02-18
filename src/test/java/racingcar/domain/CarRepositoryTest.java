@@ -19,9 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 class CarRepositoryTest {
+    private CarRepository carRepository;
+    
     @BeforeEach
-    @MethodSource
     void setUp() {
+        carRepository = new CarRepository();
         Car pobi = new Car("pobi");
         Car mery = new Car("mery");
         Car abel = new Car("abel");
@@ -31,7 +33,7 @@ class CarRepositoryTest {
         moveByCount(abel, 2);
         
         List<Car> cars = List.of(pobi, mery, abel);
-        CarRepository.updateCars(cars);
+        carRepository.updateCars(cars);
     }
     
     private void moveByCount(Car car, int moveOfTry) {
@@ -42,7 +44,7 @@ class CarRepositoryTest {
     @Test
     @DisplayName("레포지토리에 정상적으로 모든 자동차가 저장되었는지 확인한다.")
     void findAll() {
-        List<String> carNames = CarRepository.findAll()
+        List<String> carNames = carRepository.findAll()
                 .stream()
                 .map(Car::getName)
                 .collect(Collectors.toUnmodifiableList());
@@ -53,7 +55,7 @@ class CarRepositoryTest {
     @Test
     @DisplayName("최대 포지션에 위치한 자동차를 반환하는지 확인한다.")
     void findMaxPosition() {
-        assertThat(CarRepository.findMaxPosition(3)).isEqualTo(List.of("mery"));
+        assertThat(carRepository.findMaxPosition(3)).isEqualTo(List.of("mery"));
     }
 
     @ParameterizedTest(name = "cars : {0}")
@@ -61,7 +63,7 @@ class CarRepositoryTest {
     @MethodSource("provideCars")
     void numberOfCarsException(List<Car> cars) {
         assertThatIllegalArgumentException()
-                .isThrownBy(() -> CarRepository.updateCars(cars));
+                .isThrownBy(() -> carRepository.updateCars(cars));
     }
 
     private static Stream<Arguments> provideCars() {
@@ -76,7 +78,7 @@ class CarRepositoryTest {
     void validateDuplicatedCarNames() {
         List<Car> cars = List.of(new Car("aa"), new Car("aa"));
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> CarRepository.updateCars(cars));
+                .isThrownBy(() -> carRepository.updateCars(cars));
     }
     
     @Test
@@ -84,11 +86,11 @@ class CarRepositoryTest {
     void validateLessThanMinimumNumberOfCars() {
         List<Car> cars = List.of(new Car("aa"));
         Assertions.assertThatIllegalArgumentException()
-                .isThrownBy(() -> CarRepository.updateCars(cars));
+                .isThrownBy(() -> carRepository.updateCars(cars));
     }
 
     @AfterEach
     void clear() {
-        CarRepository.clear();
+        carRepository.clear();
     }
 }

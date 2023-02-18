@@ -15,15 +15,18 @@ import static org.assertj.core.api.Assertions.*;
 
 class RacingCarGameTest {
     private RacingCarGame racingCarGame;
+    private CarRepository carRepository;
+    
     @BeforeEach
     void setUp() {
-        racingCarGame = new RacingCarGame();
+        carRepository = new CarRepository();
+        racingCarGame = new RacingCarGame(carRepository);
     }
 
     @ParameterizedTest
     @MethodSource("provideCars")
     @DisplayName("우승자를 정상적으로 판별하는지 확인한다.")
-    void getWinners(List<Car> players, List<Integer> moveCounts , List<String> expectedWinners) {
+    void getWinners(List<Integer> moveCounts , List<String> expectedWinners) {
         // given
         Car pobi = new Car("pobi");
         Car mery = new Car("mery");
@@ -33,7 +36,7 @@ class RacingCarGameTest {
         moveByCount(mery, moveCounts.get(1));
         moveByCount(abel, moveCounts.get(2));
         List<Car> cars = List.of(pobi, mery, abel);
-        CarRepository.updateCars(cars);
+        carRepository.updateCars(cars);
         
         // when
         List<String> winners = racingCarGame.getWinners();
@@ -43,13 +46,11 @@ class RacingCarGameTest {
     }
 
     private static Stream<Arguments> provideCars() {
-    
-        List<Car> cars = List.of(CarTest.POBI, CarTest.MERY, CarTest.ABEL);
         return Stream.of(
-                Arguments.of(cars, List.of(0, 0, 0), List.of("pobi", "mery", "abel")),
-                Arguments.of(cars, List.of(3, 1, 1), List.of("pobi")),
-                Arguments.of(cars, List.of(3, 3, 1), List.of("pobi", "mery")),
-                Arguments.of(cars, List.of(3, 3, 3), List.of("pobi", "mery", "abel"))
+                Arguments.of(List.of(0, 0, 0), List.of("pobi", "mery", "abel")),
+                Arguments.of(List.of(3, 1, 1), List.of("pobi")),
+                Arguments.of(List.of(3, 3, 1), List.of("pobi", "mery")),
+                Arguments.of(List.of(3, 3, 3), List.of("pobi", "mery", "abel"))
         );
     }
     
@@ -60,6 +61,6 @@ class RacingCarGameTest {
 
     @AfterEach
     void clear() {
-        CarRepository.clear();
+        carRepository.clear();
     }
 }
